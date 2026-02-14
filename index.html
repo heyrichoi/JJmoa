@@ -159,6 +159,28 @@
                 border-right: none;
                 border-bottom: 1px solid rgba(251, 191, 36, 0.3);
                 flex-shrink: 0; /* 사이드바 크기 고정 */
+                padding: 0.75rem 1rem !important; /* 모바일 패딩 축소 */
+                overflow: visible !important; /* 메뉴 펼침을 위해 */
+            }
+            
+            /* 모바일 헤더 레이아웃 */
+            .mobile-header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                width: 100%;
+            }
+            
+            /* 메뉴 숨김/표시용 클래스 */
+            .mobile-menu-container {
+                display: none; /* 기본 숨김 */
+                width: 100%;
+                padding-top: 1rem;
+                border-top: 1px solid rgba(255,255,255,0.1);
+                margin-top: 0.75rem;
+            }
+            .mobile-menu-container.open {
+                display: block;
             }
         }
     </style>
@@ -171,59 +193,71 @@
         <!-- 창 내부 콘텐츠 영역 -->
         <div class="window-content">
             
-            <!-- 사이드바 -->
-            <!-- fixed 제거, flex 아이템으로 변경 -->
-            <aside class="glass-sidebar p-6 w-full lg:w-[280px] bg-mystic-dark/50 lg:border-r border-white/10 flex flex-col custom-scroll overflow-y-auto z-10">
-                <div class="text-center mb-6 pt-2">
-                    <!-- 로고 영역 -->
-                    <div class="relative inline-block group">
-                        <div class="absolute -inset-1 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
-                        <img src="https://imgur.com/cVpyzcL.jpg" alt="쫀지 플레이그라운드 로고" class="relative w-28 h-28 lg:w-32 lg:h-32 rounded-full border-4 border-mystic-border object-cover mx-auto shadow-2xl" onerror="this.src='https://placehold.co/128x128/2d1f55/fbbf24?text=Jjonji'">
+            <!-- 사이드바 (모바일에서는 상단 헤더 역할) -->
+            <aside class="glass-sidebar p-6 w-full lg:w-[280px] bg-mystic-dark/50 lg:border-r border-white/10 flex flex-col custom-scroll overflow-y-auto z-20">
+                
+                <!-- 상단 헤더 영역 (로고 + 모바일 햄버거 버튼) -->
+                <div class="mobile-header">
+                    <div class="flex items-center lg:block lg:text-center w-full lg:w-auto">
+                        <!-- 로고 -->
+                        <div class="relative inline-block group mr-3 lg:mr-0 lg:mb-6 lg:pt-2">
+                            <div class="hidden lg:block absolute -inset-1 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
+                            <img src="https://imgur.com/cVpyzcL.jpg" alt="쫀지 플레이그라운드 로고" class="relative w-10 h-10 lg:w-32 lg:h-32 rounded-full border-2 lg:border-4 border-mystic-border object-cover shadow-2xl" onerror="this.src='https://placehold.co/128x128/2d1f55/fbbf24?text=Jjonji'">
+                        </div>
+                        <h1 class="text-xl lg:text-3xl font-heading text-yellow-400 drop-shadow-md lg:mt-4 lg:mb-1">쫀지<br class="hidden lg:block"> 플레이그라운드</h1>
                     </div>
-                    <h1 class="text-2xl lg:text-3xl font-heading text-yellow-400 mt-4 mb-1 drop-shadow-md">쫀지<br>플레이그라운드</h1>
+
+                    <!-- 모바일 메뉴 버튼 (햄버거) -->
+                    <button id="mobile-menu-btn" class="lg:hidden p-2 text-yellow-400 hover:text-white transition-colors focus:outline-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
                 </div>
 
-                <nav class="flex-1">
-                    <ul class="space-y-2 lg:space-y-3">
-                        <li>
-                            <a href="#featured-games" class="nav-link flex items-center p-3 rounded-xl hover:bg-white/10 text-gray-200 hover:text-yellow-300 transition-all group">
-                                <span class="mr-3 text-xl group-hover:scale-125 transition-transform">🎪</span>
-                                <span class="text-lg">놀이기구</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#roulette-guide" class="nav-link flex items-center p-3 rounded-xl hover:bg-white/10 text-gray-200 hover:text-yellow-300 transition-all group">
-                                <span class="mr-3 text-xl group-hover:scale-125 transition-transform">📘</span>
-                                <span class="text-lg">가이드</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#treasures" class="nav-link flex items-center p-3 rounded-xl hover:bg-white/10 text-gray-200 hover:text-yellow-300 transition-all group">
-                                <span class="mr-3 text-xl group-hover:scale-125 transition-transform">💎</span>
-                                <span class="text-lg">보물창고</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#community" class="nav-link flex items-center p-3 rounded-xl hover:bg-white/10 text-gray-200 hover:text-yellow-300 transition-all group">
-                                <span class="mr-3 text-xl group-hover:scale-125 transition-transform">🏡</span>
-                                <span class="text-lg">쫀지네 집</span>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
+                <!-- 네비게이션 & 푸터 (모바일에서는 토글됨) -->
+                <div id="collapsible-menu" class="mobile-menu-container lg:block flex-1 lg:mt-0">
+                    <nav class="lg:flex-1">
+                        <ul class="space-y-1 lg:space-y-3">
+                            <li>
+                                <a href="#featured-games" class="nav-link flex items-center p-3 rounded-xl hover:bg-white/10 text-gray-200 hover:text-yellow-300 transition-all group" onclick="closeMobileMenu()">
+                                    <span class="mr-3 text-xl group-hover:scale-125 transition-transform">🎪</span>
+                                    <span class="text-lg">놀이기구</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#roulette-guide" class="nav-link flex items-center p-3 rounded-xl hover:bg-white/10 text-gray-200 hover:text-yellow-300 transition-all group" onclick="closeMobileMenu()">
+                                    <span class="mr-3 text-xl group-hover:scale-125 transition-transform">📘</span>
+                                    <span class="text-lg">가이드</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#treasures" class="nav-link flex items-center p-3 rounded-xl hover:bg-white/10 text-gray-200 hover:text-yellow-300 transition-all group" onclick="closeMobileMenu()">
+                                    <span class="mr-3 text-xl group-hover:scale-125 transition-transform">💎</span>
+                                    <span class="text-lg">보물창고</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#community" class="nav-link flex items-center p-3 rounded-xl hover:bg-white/10 text-gray-200 hover:text-yellow-300 transition-all group" onclick="closeMobileMenu()">
+                                    <span class="mr-3 text-xl group-hover:scale-125 transition-transform">🏡</span>
+                                    <span class="text-lg">쫀지네 집</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
 
-                <div class="mt-6 pt-6 border-t border-purple-800 text-center">
-                    <p class="text-xs text-gray-400">해당 페이지는 쫀지의 팬페이지입니다.</p>
+                    <div class="mt-4 lg:mt-6 pt-4 lg:pt-6 border-t border-purple-800 text-center">
+                        <p class="text-xs text-gray-400">해당 페이지는 쫀지의 팬페이지입니다.</p>
+                    </div>
                 </div>
             </aside>
 
             <!-- 메인 콘텐츠 -->
-            <!-- margin-left 제거, flex-1로 변경, 자체 스크롤 적용 -->
-            <main class="flex-1 p-6 lg:p-10 custom-scroll overflow-y-auto bg-transparent">
+            <main class="flex-1 p-4 lg:p-10 custom-scroll overflow-y-auto bg-transparent" id="main-content">
                 
                 <!-- 1. 주요 콘텐츠 섹션 (놀이기구) -->
-                <section id="featured-games" class="mb-16 scroll-mt-6">
-                    <h3 class="text-3xl font-heading text-yellow-400 mb-8 section-title-deco justify-center lg:justify-start">놀이기구</h3>
+                <section id="featured-games" class="mb-12 lg:mb-16 scroll-mt-20 lg:scroll-mt-6">
+                    <h3 class="text-2xl lg:text-3xl font-heading text-yellow-400 mb-6 lg:mb-8 section-title-deco justify-center lg:justify-start">놀이기구</h3>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
                         <!-- JJ랜드 룰렛 -->
@@ -249,7 +283,6 @@
                             <a href="https://heyrichoi.github.io/JJtarot/" target="_blank" class="block p-6 h-full flex flex-col items-center text-center">
                                 <div class="w-full aspect-video mb-6 rounded-lg overflow-hidden border border-purple-500/30 relative">
                                     <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-all z-10"></div>
-                                    <!-- 로고 변경됨 -->
                                     <img src="https://imgur.com/0zgI4WX.jpg" alt="황금토끼 타로카드" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700">
                                 </div>
                                 <h4 class="text-2xl font-heading text-yellow-300 mb-2 group-hover:text-white transition-colors">황금토끼 타로카드</h4>
@@ -266,40 +299,40 @@
                 </section>
 
                 <!-- 2. 가이드 섹션 -->
-                <section id="roulette-guide" class="mb-16 scroll-mt-6">
-                    <h3 class="text-3xl font-heading text-yellow-400 mb-8 section-title-deco justify-center lg:justify-start">JJ랜드 룰렛 가이드</h3>
+                <section id="roulette-guide" class="mb-12 lg:mb-16 scroll-mt-20 lg:scroll-mt-6">
+                    <h3 class="text-2xl lg:text-3xl font-heading text-yellow-400 mb-6 lg:mb-8 section-title-deco justify-center lg:justify-start">JJ랜드 룰렛 가이드</h3>
                     <div class="bg-mystic-card border-2 border-mystic-border rounded-2xl p-6 lg:p-8 shadow-lg text-gray-200 leading-relaxed">
-                        <h4 class="text-2xl font-heading text-yellow-300 mb-6">🎡 룰렛, 이렇게 즐겨보세요!</h4>
+                        <h4 class="text-xl lg:text-2xl font-heading text-yellow-300 mb-6">🎡 룰렛, 이렇게 즐겨보세요!</h4>
                         
                         <div class="space-y-6">
                             <div class="flex flex-col md:flex-row gap-4 items-start">
-                                <div class="flex-shrink-0 w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center text-2xl border border-yellow-400 shadow-md">1</div>
+                                <div class="flex-shrink-0 w-10 h-10 lg:w-12 lg:h-12 bg-purple-600 rounded-full flex items-center justify-center text-xl lg:text-2xl border border-yellow-400 shadow-md">1</div>
                                 <div>
-                                    <h5 class="text-xl font-bold text-yellow-200 mb-1">상황별 '프리셋' 활용하기</h5>
+                                    <h5 class="text-lg lg:text-xl font-bold text-yellow-200 mb-1">상황별 '프리셋' 활용하기</h5>
                                     <p class="text-sm text-gray-300">좌측 상단 메뉴에서 <strong>캐릭터 추첨, 벌칙, 환불 배수</strong> 등 상황에 딱 맞는 룰렛을 바로 꺼낼 수 있어요.</p>
                                 </div>
                             </div>
                             
                             <div class="flex flex-col md:flex-row gap-4 items-start">
-                                <div class="flex-shrink-0 w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center text-2xl border border-yellow-400 shadow-md">2</div>
+                                <div class="flex-shrink-0 w-10 h-10 lg:w-12 lg:h-12 bg-purple-600 rounded-full flex items-center justify-center text-xl lg:text-2xl border border-yellow-400 shadow-md">2</div>
                                 <div>
-                                    <h5 class="text-xl font-bold text-yellow-200 mb-1">내 입맛대로 '항목 편집'</h5>
+                                    <h5 class="text-lg lg:text-xl font-bold text-yellow-200 mb-1">내 입맛대로 '항목 편집'</h5>
                                     <p class="text-sm text-gray-300">항목을 자유롭게 추가/삭제할 수 있습니다! 이미 완료한 캐릭터를 삭제하고 싶다면 <strong>체크박스(☑)</strong>를 켜서 당첨된 항목을 <strong>자동으로 제거</strong>해 보세요!</p>
                                 </div>
                             </div>
 
                             <div class="flex flex-col md:flex-row gap-4 items-start">
-                                <div class="flex-shrink-0 w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center text-2xl border border-yellow-400 shadow-md">3</div>
+                                <div class="flex-shrink-0 w-10 h-10 lg:w-12 lg:h-12 bg-purple-600 rounded-full flex items-center justify-center text-xl lg:text-2xl border border-yellow-400 shadow-md">3</div>
                                 <div>
-                                    <h5 class="text-xl font-bold text-yellow-200 mb-1">확률 & 계산 기능</h5>
+                                    <h5 class="text-lg lg:text-xl font-bold text-yellow-200 mb-1">확률 & 계산 기능</h5>
                                     <p class="text-sm text-gray-300"><strong>'도네 룰렛'</strong> 모드에서는 항목별 확률을 다르게 설정할 수 있고, <strong>'환불 룰렛'</strong>은 버스비 계산까지 자동으로 해줘요!</p>
                                 </div>
                             </div>
 
                             <div class="flex flex-col md:flex-row gap-4 items-start">
-                                <div class="flex-shrink-0 w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center text-2xl border border-yellow-400 shadow-md">4</div>
+                                <div class="flex-shrink-0 w-10 h-10 lg:w-12 lg:h-12 bg-purple-600 rounded-full flex items-center justify-center text-xl lg:text-2xl border border-yellow-400 shadow-md">4</div>
                                 <div>
-                                    <h5 class="text-xl font-bold text-yellow-200 mb-1">심장 쫄깃한 '히든 연출'</h5>
+                                    <h5 class="text-lg lg:text-xl font-bold text-yellow-200 mb-1">심장 쫄깃한 '히든 연출'</h5>
                                     <p class="text-sm text-gray-300">룰렛을 돌리면 화면이 줌인되며 긴장감 UP! 가끔 15% 확률로 발동하는 <strong>"한번 더!"</strong> 깜짝 연출을 기대해보세요. 😲</p>
                                 </div>
                             </div>
@@ -308,8 +341,8 @@
                 </section>
 
                 <!-- 3. 보물창고 섹션 -->
-                <section id="treasures" class="mb-16 scroll-mt-6">
-                    <h3 class="text-3xl font-heading text-yellow-400 mb-8 section-title-deco justify-center lg:justify-start">보물창고</h3>
+                <section id="treasures" class="mb-12 lg:mb-16 scroll-mt-20 lg:scroll-mt-6">
+                    <h3 class="text-2xl lg:text-3xl font-heading text-yellow-400 mb-6 lg:mb-8 section-title-deco justify-center lg:justify-start">보물창고</h3>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
                         <!-- 황금동산 배경화면 -->
@@ -360,8 +393,8 @@
                 </section>
 
                 <!-- 4. 커뮤니티 섹션 (쫀지네 집) -->
-                <section id="community" class="mb-16 scroll-mt-6">
-                    <h3 class="text-3xl font-heading text-yellow-400 mb-8 section-title-deco justify-center lg:justify-start">쫀지네 집</h3>
+                <section id="community" class="mb-12 lg:mb-16 scroll-mt-20 lg:scroll-mt-6">
+                    <h3 class="text-2xl lg:text-3xl font-heading text-yellow-400 mb-6 lg:mb-8 section-title-deco justify-center lg:justify-start">쫀지네 집</h3>
                     
                     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
                         <!-- 유튜브 -->
@@ -405,5 +438,21 @@
         </div>
     </div>
 
+    <!-- 모바일 메뉴 토글 스크립트 -->
+    <script>
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const collapsibleMenu = document.getElementById('collapsible-menu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            collapsibleMenu.classList.toggle('open');
+        });
+
+        // 메뉴 링크 클릭 시 메뉴 닫기
+        function closeMobileMenu() {
+            if (window.innerWidth < 1024) { // 모바일 화면에서만 동작
+                collapsibleMenu.classList.remove('open');
+            }
+        }
+    </script>
 </body>
 </html>
