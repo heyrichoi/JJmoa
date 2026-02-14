@@ -34,8 +34,7 @@
         /* Custom Styles for Mystical Theme */
         body {
             font-family: 'Noto Sans KR', sans-serif;
-            background-color: #0f0824; /* 더 어두운 배경색 (우주 느낌) */
-            /* Starry background pattern simulation */
+            background-color: #0f0824;
             background-image: 
                 radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 3px),
                 radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 2px),
@@ -43,45 +42,40 @@
             background-size: 550px 550px, 350px 350px, 250px 250px;
             background-position: 0 0, 40px 60px, 130px 270px;
             color: #e2e8f0;
-            
-            /* Center the "Window" */
             display: flex;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
-            padding: 1rem; /* 모바일에서도 약간의 여백 */
-            overflow: hidden; /* 배경 스크롤 방지 */
+            padding: 1rem;
+            overflow: hidden;
         }
 
-        /* The Main Window Container */
         .app-window {
             width: 100%;
-            max-width: 1280px; /* 최대 너비 제한 */
-            height: 90vh; /* 화면 높이의 90% */
+            max-width: 1280px;
+            height: 90vh;
             max-height: 1080px;
-            background-color: rgba(26, 16, 60, 0.95); /* 창 배경색 (반투명) */
+            background-color: rgba(26, 16, 60, 0.95);
             backdrop-filter: blur(10px);
-            border-radius: 2rem; /* 둥근 모서리 */
-            border: 4px solid #fbbf24; /* 황금색 테두리 */
+            border-radius: 2rem;
+            border: 4px solid #fbbf24;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
             display: flex;
             flex-direction: column;
-            overflow: hidden; /* 내부 스크롤을 위해 */
+            overflow: hidden;
             position: relative;
         }
 
-        /* Layout inside the window */
         .window-content {
             display: flex;
             flex: 1;
-            overflow: hidden; /* 자식 요소 스크롤 */
+            overflow: hidden;
         }
 
         h1, h2, h3, .nav-link, .btn-text {
             font-family: 'Jua', sans-serif;
         }
 
-        /* Scrollbar styling - 창 내부 스크롤바 커스텀 */
         .custom-scroll::-webkit-scrollbar {
             width: 6px;
         }
@@ -96,7 +90,6 @@
             background: #fbbf24; 
         }
 
-        /* Card Styles mimicking Tarot Cards */
         .tarot-card {
             background: linear-gradient(180deg, #2d1f55 0%, #1a103c 100%);
             border: 2px solid #fbbf24;
@@ -142,28 +135,22 @@
 
         /* Mobile Optimization */
         @media (max-width: 1024px) {
-            body {
-                padding: 0; /* 모바일은 꽉 차게 */
-            }
+            body { padding: 0; }
             .app-window {
-                height: 100vh; /* 모바일은 전체 높이 */
+                height: 100vh;
                 max-height: none;
-                border-radius: 0; /* 모서리 둥글기 제거 */
-                border: none; /* 테두리 제거 (화면 꽉 차게) */
+                border-radius: 0;
+                border: none;
             }
-            .window-content {
-                flex-direction: column; /* 세로 배치 */
-            }
+            .window-content { flex-direction: column; }
             .glass-sidebar {
                 width: 100%;
                 border-right: none;
                 border-bottom: 1px solid rgba(251, 191, 36, 0.3);
-                flex-shrink: 0; /* 사이드바 크기 고정 */
-                padding: 0.75rem 1rem !important; /* 모바일 패딩 축소 */
-                overflow: visible !important; /* 메뉴 펼침을 위해 */
+                flex-shrink: 0;
+                padding: 0.5rem 1rem !important;
             }
             
-            /* 모바일 헤더 레이아웃 */
             .mobile-header {
                 display: flex;
                 align-items: center;
@@ -171,54 +158,62 @@
                 width: 100%;
             }
             
-            /* 메뉴 숨김/표시용 클래스 */
+            /* Overlay Menu for Mobile */
             .mobile-menu-container {
-                display: none; /* 기본 숨김 */
+                position: absolute;
+                top: 100%;
+                left: 0;
                 width: 100%;
-                padding-top: 1rem;
-                border-top: 1px solid rgba(255,255,255,0.1);
-                margin-top: 0.75rem;
+                background-color: rgba(20, 12, 45, 0.98);
+                backdrop-filter: blur(15px);
+                padding: 1.5rem 1rem;
+                border-bottom: 3px solid #fbbf24;
+                box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+                z-index: 50;
             }
-            .mobile-menu-container.open {
+            
+            /* Show menu animation */
+            .mobile-menu-container:not(.hidden) {
                 display: block;
+                animation: slideIn 0.3s ease-out forwards;
+            }
+
+            @keyframes slideIn {
+                from { opacity: 0; transform: translateY(-10px); }
+                to { opacity: 1; transform: translateY(0); }
             }
         }
     </style>
 </head>
 <body>
 
-    <!-- 앱 창 (App Window Container) -->
     <div class="app-window">
-        
-        <!-- 창 내부 콘텐츠 영역 -->
         <div class="window-content">
             
-            <!-- 사이드바 (모바일에서는 상단 헤더 역할) -->
-            <aside class="glass-sidebar p-6 w-full lg:w-[280px] bg-mystic-dark/50 lg:border-r border-white/10 flex flex-col custom-scroll overflow-y-auto z-20">
+            <!-- 사이드바 & 모바일 헤더 -->
+            <aside class="glass-sidebar relative p-3 lg:p-6 w-full lg:w-[280px] bg-mystic-dark/50 lg:border-r border-white/10 flex flex-col lg:overflow-y-auto custom-scroll z-30">
                 
-                <!-- 상단 헤더 영역 (로고 + 모바일 햄버거 버튼) -->
                 <div class="mobile-header">
                     <div class="flex items-center lg:block lg:text-center w-full lg:w-auto">
-                        <!-- 로고 -->
                         <div class="relative inline-block group mr-3 lg:mr-0 lg:mb-6 lg:pt-2">
                             <div class="hidden lg:block absolute -inset-1 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
-                            <img src="https://imgur.com/cVpyzcL.jpg" alt="쫀지 플레이그라운드 로고" class="relative w-10 h-10 lg:w-32 lg:h-32 rounded-full border-2 lg:border-4 border-mystic-border object-cover shadow-2xl" onerror="this.src='https://placehold.co/128x128/2d1f55/fbbf24?text=Jjonji'">
+                            <img src="https://imgur.com/cVpyzcL.jpg" alt="쫀지 플레이그라운드 로고" class="relative w-8 h-8 lg:w-32 lg:h-32 rounded-full border-2 lg:border-4 border-mystic-border object-cover shadow-2xl">
                         </div>
-                        <h1 class="text-xl lg:text-3xl font-heading text-yellow-400 drop-shadow-md lg:mt-4 lg:mb-1">쫀지<br class="hidden lg:block"> 플레이그라운드</h1>
+                        <h1 class="text-lg lg:text-3xl font-heading text-yellow-400 drop-shadow-md lg:mt-4 lg:mb-1">쫀지<br class="hidden lg:block"> 플레이그라운드</h1>
                     </div>
 
-                    <!-- 모바일 메뉴 버튼 (햄버거) -->
-                    <button id="mobile-menu-btn" class="lg:hidden p-2 text-yellow-400 hover:text-white transition-colors focus:outline-none">
+                    <!-- 햄버거 버튼 -->
+                    <button id="mobile-menu-btn" class="lg:hidden p-1 text-yellow-400 hover:text-white transition-colors focus:outline-none">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
                     </button>
                 </div>
 
-                <!-- 네비게이션 & 푸터 (모바일에서는 토글됨) -->
-                <div id="collapsible-menu" class="mobile-menu-container lg:block flex-1 lg:mt-0">
+                <!-- 네비게이션 (모바일에서는 hidden으로 시작) -->
+                <div id="collapsible-menu" class="hidden lg:flex mobile-menu-container lg:static lg:w-auto lg:bg-transparent lg:p-0 lg:border-none lg:shadow-none flex-col flex-1 lg:mt-0">
                     <nav class="lg:flex-1">
-                        <ul class="space-y-1 lg:space-y-3">
+                        <ul class="space-y-2 lg:space-y-3">
                             <li>
                                 <a href="#featured-games" class="nav-link flex items-center p-3 rounded-xl hover:bg-white/10 text-gray-200 hover:text-yellow-300 transition-all group" onclick="closeMobileMenu()">
                                     <span class="mr-3 text-xl group-hover:scale-125 transition-transform">🎪</span>
@@ -253,14 +248,11 @@
             </aside>
 
             <!-- 메인 콘텐츠 -->
-            <main class="flex-1 p-4 lg:p-10 custom-scroll overflow-y-auto bg-transparent" id="main-content">
+            <main class="flex-1 p-4 lg:p-10 custom-scroll overflow-y-auto bg-transparent relative z-10" id="main-content">
                 
-                <!-- 1. 주요 콘텐츠 섹션 (놀이기구) -->
                 <section id="featured-games" class="mb-12 lg:mb-16 scroll-mt-20 lg:scroll-mt-6">
                     <h3 class="text-2xl lg:text-3xl font-heading text-yellow-400 mb-6 lg:mb-8 section-title-deco justify-center lg:justify-start">놀이기구</h3>
-                    
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
-                        <!-- JJ랜드 룰렛 -->
                         <article class="tarot-card rounded-2xl group cursor-pointer">
                             <a href="https://heyrichoi.github.io/JJland/" target="_blank" class="block p-6 h-full flex flex-col items-center text-center">
                                 <div class="w-full aspect-video mb-6 rounded-lg overflow-hidden border border-purple-500/30 relative">
@@ -268,17 +260,11 @@
                                     <img src="https://imgur.com/EqZiocO.jpg" alt="JJ랜드 룰렛" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700">
                                 </div>
                                 <h4 class="text-2xl font-heading text-yellow-300 mb-2 group-hover:text-white transition-colors">JJ랜드 룰렛</h4>
-                                <p class="text-gray-300 text-sm mb-6 flex-grow">
-                                    행운의 여신은 당신의 편일까요?<br>
-                                    지금 바로 룰렛을 돌려보세요!
-                                </p>
-                                <span class="inline-block px-6 py-2 bg-gradient-to-r from-orange-500 to-red-500 rounded-full text-white font-bold shadow-lg shadow-orange-500/30 group-hover:shadow-orange-500/60 transition-all">
-                                    입장하기
-                                </span>
+                                <p class="text-gray-300 text-sm mb-6 flex-grow">행운의 여신은 당신의 편일까요?<br>지금 바로 룰렛을 돌려보세요!</p>
+                                <span class="inline-block px-6 py-2 bg-gradient-to-r from-orange-500 to-red-500 rounded-full text-white font-bold shadow-lg shadow-orange-500/30 group-hover:shadow-orange-500/60 transition-all">입장하기</span>
                             </a>
                         </article>
 
-                        <!-- 황금토끼 타로카드 -->
                         <article class="tarot-card rounded-2xl group cursor-pointer">
                             <a href="https://heyrichoi.github.io/JJtarot/" target="_blank" class="block p-6 h-full flex flex-col items-center text-center">
                                 <div class="w-full aspect-video mb-6 rounded-lg overflow-hidden border border-purple-500/30 relative">
@@ -286,24 +272,17 @@
                                     <img src="https://imgur.com/0zgI4WX.jpg" alt="황금토끼 타로카드" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700">
                                 </div>
                                 <h4 class="text-2xl font-heading text-yellow-300 mb-2 group-hover:text-white transition-colors">황금토끼 타로카드</h4>
-                                <p class="text-gray-300 text-sm mb-6 flex-grow">
-                                    신비로운 황금토끼가 들려주는<br>
-                                    당신의 미래와 조언을 들어보세요.
-                                </p>
-                                <span class="inline-block px-6 py-2 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full text-white font-bold shadow-lg shadow-purple-500/30 group-hover:shadow-purple-500/60 transition-all">
-                                    점치러 가기
-                                </span>
+                                <p class="text-gray-300 text-sm mb-6 flex-grow">신비로운 황금토끼가 들려주는<br>당신의 미래와 조언을 들어보세요.</p>
+                                <span class="inline-block px-6 py-2 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full text-white font-bold shadow-lg shadow-purple-500/30 group-hover:shadow-purple-500/60 transition-all">점치러 가기</span>
                             </a>
                         </article>
                     </div>
                 </section>
 
-                <!-- 2. 가이드 섹션 -->
                 <section id="roulette-guide" class="mb-12 lg:mb-16 scroll-mt-20 lg:scroll-mt-6">
                     <h3 class="text-2xl lg:text-3xl font-heading text-yellow-400 mb-6 lg:mb-8 section-title-deco justify-center lg:justify-start">JJ랜드 룰렛 가이드</h3>
                     <div class="bg-mystic-card border-2 border-mystic-border rounded-2xl p-6 lg:p-8 shadow-lg text-gray-200 leading-relaxed">
                         <h4 class="text-xl lg:text-2xl font-heading text-yellow-300 mb-6">🎡 룰렛, 이렇게 즐겨보세요!</h4>
-                        
                         <div class="space-y-6">
                             <div class="flex flex-col md:flex-row gap-4 items-start">
                                 <div class="flex-shrink-0 w-10 h-10 lg:w-12 lg:h-12 bg-purple-600 rounded-full flex items-center justify-center text-xl lg:text-2xl border border-yellow-400 shadow-md">1</div>
@@ -312,7 +291,6 @@
                                     <p class="text-sm text-gray-300">좌측 상단 메뉴에서 <strong>캐릭터 추첨, 벌칙, 환불 배수</strong> 등 상황에 딱 맞는 룰렛을 바로 꺼낼 수 있어요.</p>
                                 </div>
                             </div>
-                            
                             <div class="flex flex-col md:flex-row gap-4 items-start">
                                 <div class="flex-shrink-0 w-10 h-10 lg:w-12 lg:h-12 bg-purple-600 rounded-full flex items-center justify-center text-xl lg:text-2xl border border-yellow-400 shadow-md">2</div>
                                 <div>
@@ -320,7 +298,6 @@
                                     <p class="text-sm text-gray-300">항목을 자유롭게 추가/삭제할 수 있습니다! 이미 완료한 캐릭터를 삭제하고 싶다면 <strong>체크박스(☑)</strong>를 켜서 당첨된 항목을 <strong>자동으로 제거</strong>해 보세요!</p>
                                 </div>
                             </div>
-
                             <div class="flex flex-col md:flex-row gap-4 items-start">
                                 <div class="flex-shrink-0 w-10 h-10 lg:w-12 lg:h-12 bg-purple-600 rounded-full flex items-center justify-center text-xl lg:text-2xl border border-yellow-400 shadow-md">3</div>
                                 <div>
@@ -328,7 +305,6 @@
                                     <p class="text-sm text-gray-300"><strong>'도네 룰렛'</strong> 모드에서는 항목별 확률을 다르게 설정할 수 있고, <strong>'환불 룰렛'</strong>은 버스비 계산까지 자동으로 해줘요!</p>
                                 </div>
                             </div>
-
                             <div class="flex flex-col md:flex-row gap-4 items-start">
                                 <div class="flex-shrink-0 w-10 h-10 lg:w-12 lg:h-12 bg-purple-600 rounded-full flex items-center justify-center text-xl lg:text-2xl border border-yellow-400 shadow-md">4</div>
                                 <div>
@@ -340,12 +316,9 @@
                     </div>
                 </section>
 
-                <!-- 3. 보물창고 섹션 -->
                 <section id="treasures" class="mb-12 lg:mb-16 scroll-mt-20 lg:scroll-mt-6">
                     <h3 class="text-2xl lg:text-3xl font-heading text-yellow-400 mb-6 lg:mb-8 section-title-deco justify-center lg:justify-start">보물창고</h3>
-                    
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-                        <!-- 황금동산 배경화면 -->
                         <article class="tarot-card rounded-2xl group cursor-pointer">
                             <a href="https://drive.google.com/drive/folders/1jN0gUiC0_NgzF8WeN8QUX-CTzEbS6Djc?usp=sharing" target="_blank" class="block p-6 h-full flex flex-col items-center text-center">
                                 <div class="w-full aspect-video mb-6 rounded-lg overflow-hidden border border-purple-500/30 relative">
@@ -353,14 +326,10 @@
                                     <img src="https://imgur.com/atBwVFS.jpg" alt="황금동산 배경화면" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700">
                                 </div>
                                 <h4 class="text-2xl font-heading text-yellow-300 mb-2 group-hover:text-white transition-colors">황금동산 배경화면</h4>
-                                <p class="text-gray-300 text-sm mb-6 flex-grow"></p>
-                                <span class="inline-block px-6 py-2 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full text-white font-bold shadow-lg shadow-green-500/30 group-hover:shadow-green-500/60 transition-all">
-                                    다운로드 하러가기
-                                </span>
+                                <span class="inline-block px-6 py-2 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full text-white font-bold shadow-lg shadow-green-500/30 group-hover:shadow-green-500/60 transition-all">다운로드 하러가기</span>
                             </a>
                         </article>
 
-                        <!-- 타로 : 악마 쫀지 배경화면 -->
                         <article class="tarot-card rounded-2xl group cursor-pointer">
                             <a href="https://drive.google.com/drive/folders/1Gykx1sNDWiHGcRa8WbDPnLaVerrAtOgp?usp=sharing" target="_blank" class="block p-6 h-full flex flex-col items-center text-center">
                                 <div class="w-full aspect-video mb-6 rounded-lg overflow-hidden border border-purple-500/30 relative">
@@ -368,14 +337,10 @@
                                     <img src="https://imgur.com/8LxO2Tk.jpg" alt="타로 : 악마 쫀지 배경화면" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700">
                                 </div>
                                 <h4 class="text-2xl font-heading text-yellow-300 mb-2 group-hover:text-white transition-colors">타로 : 악마 쫀지 배경화면</h4>
-                                <p class="text-gray-300 text-sm mb-6 flex-grow"></p>
-                                <span class="inline-block px-6 py-2 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full text-white font-bold shadow-lg shadow-green-500/30 group-hover:shadow-green-500/60 transition-all">
-                                    다운로드 하러가기
-                                </span>
+                                <span class="inline-block px-6 py-2 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full text-white font-bold shadow-lg shadow-green-500/30 group-hover:shadow-green-500/60 transition-all">다운로드 하러가기</span>
                             </a>
                         </article>
 
-                        <!-- 타로 : 별 쫀지 배경화면 -->
                         <article class="tarot-card rounded-2xl group cursor-pointer">
                             <a href="https://drive.google.com/drive/folders/1079RXG7gboqMFMLUqDow22JIIinsTUHN?usp=sharing" target="_blank" class="block p-6 h-full flex flex-col items-center text-center">
                                 <div class="w-full aspect-video mb-6 rounded-lg overflow-hidden border border-purple-500/30 relative">
@@ -383,57 +348,37 @@
                                     <img src="https://imgur.com/w8jzdn5.jpg" alt="타로 : 별 쫀지 배경화면" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700">
                                 </div>
                                 <h4 class="text-2xl font-heading text-yellow-300 mb-2 group-hover:text-white transition-colors">타로 : 별 쫀지 배경화면</h4>
-                                <p class="text-gray-300 text-sm mb-6 flex-grow"></p>
-                                <span class="inline-block px-6 py-2 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full text-white font-bold shadow-lg shadow-green-500/30 group-hover:shadow-green-500/60 transition-all">
-                                    다운로드 하러가기
-                                </span>
+                                <span class="inline-block px-6 py-2 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full text-white font-bold shadow-lg shadow-green-500/30 group-hover:shadow-green-500/60 transition-all">다운로드 하러가기</span>
                             </a>
                         </article>
                     </div>
                 </section>
 
-                <!-- 4. 커뮤니티 섹션 (쫀지네 집) -->
                 <section id="community" class="mb-12 lg:mb-16 scroll-mt-20 lg:scroll-mt-6">
                     <h3 class="text-2xl lg:text-3xl font-heading text-yellow-400 mb-6 lg:mb-8 section-title-deco justify-center lg:justify-start">쫀지네 집</h3>
-                    
                     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-                        <!-- 유튜브 -->
-                        <a href="https://www.youtube.com/@%EC%AB%80%EC%A7%80" target="_blank" class="social-btn group relative overflow-hidden bg-[#FF0000] rounded-xl p-4 text-center shadow-lg hover:shadow-red-500/40 border border-white/10">
-                            <div class="absolute -right-4 -top-4 w-16 h-16 bg-white/20 rounded-full blur-xl group-hover:scale-150 transition-transform"></div>
+                        <a href="https://www.youtube.com/@%EC%AB%80%EC%A7%80" target="_blank" class="social-btn group relative overflow-hidden bg-[#FF0000] rounded-xl p-4 text-center border border-white/10 shadow-lg">
                             <span class="text-3xl block mb-2">▶️</span>
                             <span class="font-heading text-white text-lg">유튜브</span>
                         </a>
-
-                        <!-- 치지직 -->
-                        <a href="https://chzzk.naver.com/09f2c3d669fb6ef362f2d78029fc4300" target="_blank" class="social-btn group relative overflow-hidden bg-[#00FFA3] rounded-xl p-4 text-center shadow-lg hover:shadow-green-400/40 border border-white/10">
-                            <div class="absolute -right-4 -top-4 w-16 h-16 bg-white/40 rounded-full blur-xl group-hover:scale-150 transition-transform"></div>
+                        <a href="https://chzzk.naver.com/09f2c3d669fb6ef362f2d78029fc4300" target="_blank" class="social-btn group relative overflow-hidden bg-[#00FFA3] rounded-xl p-4 text-center border border-white/10 shadow-lg">
                             <span class="text-3xl block mb-2">⚡</span>
                             <span class="font-heading text-gray-900 text-lg">치지직</span>
                         </a>
-
-                        <!-- SOOP (아프리카TV) -->
-                        <a href="https://bj.afreecatv.com/rozh1648" target="_blank" class="social-btn group relative overflow-hidden bg-[#4279FF] rounded-xl p-4 text-center shadow-lg hover:shadow-blue-500/40 border border-white/10">
-                            <div class="absolute -right-4 -top-4 w-16 h-16 bg-white/20 rounded-full blur-xl group-hover:scale-150 transition-transform"></div>
+                        <a href="https://bj.afreecatv.com/rozh1648" target="_blank" class="social-btn group relative overflow-hidden bg-[#4279FF] rounded-xl p-4 text-center border border-white/10 shadow-lg">
                             <span class="text-3xl block mb-2">🌲</span>
                             <span class="font-heading text-white text-lg">SOOP</span>
                         </a>
-
-                        <!-- 팬카페 -->
-                        <a href="https://cafe.naver.com/jjonji" target="_blank" class="social-btn group relative overflow-hidden bg-[#2DB400] rounded-xl p-4 text-center shadow-lg hover:shadow-green-600/40 border border-white/10">
-                            <div class="absolute -right-4 -top-4 w-16 h-16 bg-white/20 rounded-full blur-xl group-hover:scale-150 transition-transform"></div>
+                        <a href="https://cafe.naver.com/jjonji" target="_blank" class="social-btn group relative overflow-hidden bg-[#2DB400] rounded-xl p-4 text-center border border-white/10 shadow-lg">
                             <span class="text-3xl block mb-2">☕</span>
                             <span class="font-heading text-white text-lg">팬카페</span>
                         </a>
-
-                        <!-- 디스코드 -->
-                        <a href="https://discord.gg/nK92jk67Vv" target="_blank" class="social-btn group relative overflow-hidden bg-[#5865F2] rounded-xl p-4 text-center shadow-lg hover:shadow-indigo-500/40 border border-white/10">
-                            <div class="absolute -right-4 -top-4 w-16 h-16 bg-white/20 rounded-full blur-xl group-hover:scale-150 transition-transform"></div>
+                        <a href="https://discord.gg/nK92jk67Vv" target="_blank" class="social-btn group relative overflow-hidden bg-[#5865F2] rounded-xl p-4 text-center border border-white/10 shadow-lg">
                             <span class="text-3xl block mb-2">💬</span>
                             <span class="font-heading text-white text-lg">디스코드</span>
                         </a>
                     </div>
                 </section>
-
             </main>
         </div>
     </div>
@@ -443,14 +388,21 @@
         const mobileMenuBtn = document.getElementById('mobile-menu-btn');
         const collapsibleMenu = document.getElementById('collapsible-menu');
 
-        mobileMenuBtn.addEventListener('click', () => {
-            collapsibleMenu.classList.toggle('open');
+        mobileMenuBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            collapsibleMenu.classList.toggle('hidden');
         });
 
-        // 메뉴 링크 클릭 시 메뉴 닫기
+        // 메뉴 외부 클릭 시 닫기
+        document.addEventListener('click', () => {
+            if (window.innerWidth < 1024) {
+                collapsibleMenu.classList.add('hidden');
+            }
+        });
+
         function closeMobileMenu() {
-            if (window.innerWidth < 1024) { // 모바일 화면에서만 동작
-                collapsibleMenu.classList.remove('open');
+            if (window.innerWidth < 1024) {
+                collapsibleMenu.classList.add('hidden');
             }
         }
     </script>
